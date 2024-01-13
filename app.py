@@ -46,7 +46,8 @@ def load_data():
     with st.spinner(text="Medicine-GPT is Loading"):
         reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
         docs = reader.load_data()
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
+        # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="text-davinci-003", temperature=0.2, system_prompt=system_prompt))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
