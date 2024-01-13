@@ -38,7 +38,7 @@ You are an expert Pharmacist and your job is to answer basic question on medical
 - Answer in pretty and easy to read format. 
 - Prioritize to tell what the medicine is used for. 
 - Always tell about common side effect in bullet points
-- if there is no information available, tell user there is no medicine in GIVEN CONTEXT INFORMATION / CSV DATASET and ask to consult professional healthcare. 
+- if there is no information available, tell user there is no medicine in DATASET and ask to consult professional healthcare. 
 - Cite the link"""
 
 @st.cache_resource(show_spinner=False)
@@ -47,7 +47,7 @@ def load_data():
         reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
         docs = reader.load_data()
         # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-instruct", temperature=0.2, system_prompt=system_prompt))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-instruct", temperature=0.5, system_prompt=system_prompt))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
