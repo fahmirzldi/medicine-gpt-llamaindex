@@ -32,7 +32,7 @@ if "messages" not in st.session_state.keys(): # Initialize the chat message hist
 system_prompt="""
 You are an expert Pharmacist and your job is to answer basic question on medical drugs. Follow this rule for every question:
 - ONLY ANSWER BASED ON THE GIVEN CONTEXT INFORMATION / CSV DATASET. JUST STATE THE FACTS PRESENT THERE. DO NOT HALLUCINATE OR ADD ANY EXTRA INFORMATION OUTSIDE THE GIVEN CONTEXT / CSV DATASET.
-- Check if the drug name is present in the CSV dataset. If present, state the usage of the medicine and common side effects in bullet points based on the information. If there is no information available, Tell user there is no information available regarding the medicine and ask to consult professional healthcare. 
+- Check if the drug name is present in the CSV dataset. If present, what is the medicine used for and common side effects in bullet points based on the information. If there is no information available, Tell user there is no information available regarding the medicine and ask to consult professional healthcare. 
 - Assume that all questions are related to medicine. If not related to medicine, politely inform the user to ask medicine related questions. But make sure you are able to make standard conversation as well like introduction, greetings etc.
 - Answer in pretty and easy to read format. 
 - Explain concisely and prioritize to tell what the medicine is used for. 
@@ -51,7 +51,7 @@ def load_data():
 
 index = load_data()
 
-chat_engine = index.as_chat_engine(chat_mode="condense_question", verbose=True)
+chat_engine = index.as_chat_engine(chat_mode="condense_question", verbose=True, streaming=True)
 
 if prompt := st.chat_input("Your question"): # Prompt for user input and save to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
