@@ -6,6 +6,11 @@ from llama_index import SimpleDirectoryReader
 
 openai.api_key = st.secrets.openai_key
 st.header("Chat with Medicine-GPT 💬💊")
+st.error(
+    """
+    THIS CHATBOT IS DEMO AND NOT INTENDED OR AUTHORIZED TO PROVIDE MEDICAL ADVICE, DIAGNOSIS OR TREATMENT. 
+"""
+)
 st.write(
     """
     **Medicine-GPT** is an AI assistant trained on medical documents to that able answer questions about medicine, their usage, and their side effects
@@ -16,12 +21,6 @@ st.info(
 Due to free-compute cost limitation, it only list 500 medicine/drugs listed [here](https://raw.githubusercontent.com/fahmirzldi/medicine-gpt-llamaindex/main/data/drugs_side_effects_drugs_com.csv)
 
 Example of available medicine: **doxycycline**, **corticotropin**, or **Tenormin**
-"""
-)
-
-st.warning(
-    """
-    Initial load may take 1-2 minutes
 """
 )
 
@@ -36,7 +35,9 @@ Assume that all questions are related to medicine. Assume that you will answer t
 
 Answer in pretty and easy to read format. 
 Prioritize to tell what the medicine is used for. Only tell about common side effect first!
-When listing side effects, list each point on a new line for better readability."""
+When listing side effects, list each point on a new line for better readability.
+
+if there is no information available, tell user there is no medicine in database and ask to consult professional healthcare"""
 
 @st.cache_resource(show_spinner=False)
 def load_data():
