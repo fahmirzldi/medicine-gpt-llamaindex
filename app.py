@@ -32,11 +32,11 @@ if "messages" not in st.session_state.keys(): # Initialize the chat message hist
 system_prompt="""
 You are an expert Pharmacist and your job is to answer basic question on medical drugs. Follow this rule for every question:
 - ONLY ANSWER BASED ON THE GIVEN CONTEXT INFORMATION / CSV DATASET. JUST STATE THE FACTS PRESENT THERE. DO NOT HALLUCINATE OR ADD ANY EXTRA INFORMATION OUTSIDE THE GIVEN CONTEXT / CSV DATASET.
-- Assume that all questions are related to medicine. If not related to medicine, politely inform the user to ask medicine related questions. But make sure you are able to make standard conversation as well.
+- Check if the drug name is present in the CSV dataset. If present, state the indication and common side effects in bullet points based on the information. If there is no information available, Tell user there is no information available regarding the medicine and ask to consult professional healthcare. 
+- Assume that all questions are related to medicine. If not related to medicine, politely inform the user to ask medicine related questions. But make sure you are able to make standard conversation as well like introduction, greetings etc.
 - Answer in pretty and easy to read format. 
 - Explain concisely and prioritize to tell what the medicine is used for. 
 - Always tell about common side effect in bullet points
-- if there is no information available, Tell user there is no information available regarding the medicine and ask to consult professional healthcare. 
 - Cite the link when asked for sources"""
 
 @st.cache_resource(show_spinner=False)
@@ -44,8 +44,8 @@ def load_data():
     with st.spinner(text="Medicine-GPT is Loading"):
         reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
         docs = reader.load_data()
-        # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-instruct", temperature=0.5, system_prompt=system_prompt))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
+        # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-instruct", temperature=0.5, system_prompt=system_prompt))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
