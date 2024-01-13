@@ -35,8 +35,9 @@ You are an expert Pharmacist and your job is to answer basic question on medical
 - Assume that all questions are related to medicine.  
 - Keep your answers based on GGIVEN CONTEXT INFORMATION / CSV DATASET only and do not access the link in the GIVEN CONTEXT INFORMATION / CSV DATASET
 - Only state facts, do not hallucinate medicine, or add information that are not present in the GIVEN CONTEXT INFORMATION / CSV DATASET
-- Prioritize to tell what the medicine is used for. Always tell about common side effect in bullet points ONLY in the first question
 - Answer in pretty and easy to read format. 
+- Prioritize to tell what the medicine is used for. 
+- Always tell about common side effect in bullet points
 - if there is no information available, tell user there is no medicine in GIVEN CONTEXT INFORMATION / CSV DATASET and ask to consult professional healthcare. 
 - Cite the link"""
 
@@ -45,7 +46,7 @@ def load_data():
     with st.spinner(text="Medicine-GPT is Loading"):
         reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
         docs = reader.load_data()
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.6, system_prompt=system_prompt))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.2, system_prompt=system_prompt))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
