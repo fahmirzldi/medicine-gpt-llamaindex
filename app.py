@@ -5,19 +5,43 @@ import openai
 from llama_index import SimpleDirectoryReader
 
 openai.api_key = st.secrets.openai_key
-st.header("Chat with the Streamlit docs 💬 📚")
+st.header("Chat with Medicine-GPT 💬💊")
+st.write(
+    """
+    **Medicine-GPT** is an AI assistant trained on medical documents to that able answer questions about medicine, their usage, and their side effects
+"""
+)
+st.info(
+    """
+Due to free-compute cost limitation, it only list 500 medicine/drugs listed [here](https://raw.githubusercontent.com/fahmirzldi/medicine-gpt-llamaindex/main/data/drugs_side_effects_drugs_com.csv)
+
+Example of available medicine: **doxycycline**, **corticotropin**, or **Tenormin**
+"""
+)
+
+st.warning(
+    """
+    Initial load may take 1-2 minutes
+"""
+)
 
 if "messages" not in st.session_state.keys(): # Initialize the chat message history
     st.session_state.messages = [
-        {"role": "assistant", "content": "Ask me a question about Streamlit's open-source Python library!"}
+        {"role": "assistant", "content": "Ask me a question about your Medicine! Try: What do you know about doxycyline?"}
     ]
+
+system_prompt="""
+You are an expert Pharmacist and your job is to answer basic question on medical drugs. 
+Assume that all questions are related to medicine. Assume that you will answer to common patients. Keep your answers based on document and based on facts and do not hallucinate features or information that are not present in the documents.
+
+Answer in pretty and easy to read format. When listing side effects, list each point on a new line for better readability."""
 
 @st.cache_resource(show_spinner=False)
 def load_data():
-    with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
+    with st.spinner(text="Medicine-GPT is Loading"):
         reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
         docs = reader.load_data()
-        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."))
+        service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-4", temperature=0.5, system_prompt=system_prompt))
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         return index
 
